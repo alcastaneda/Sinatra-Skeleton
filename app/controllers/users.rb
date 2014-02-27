@@ -31,11 +31,7 @@ get '/user/:id' do
 end
 
 post '/user/new' do
-  user = User.new({
-    email: params[:email],
-    password: params[:password],
-    password_confirmation: params[:password_confirmation]
-    })
+  user = User.new(params[:user])
   if user.save
     session[:user_id] = user.id
     redirect to("/user/#{user.id}")
@@ -61,11 +57,7 @@ post '/user/edit' do
   @user = User.find(session[:user_id])
 
   if @user && @user.authenticate(params[:current_password])
-    @user.update({
-      email: params[:email],
-      password: params[:password],
-      password_confirmation: params[:password_confirmation]
-      })
+    @user.update(params[:user])
     if @user.save
       redirect to("/user/#{@user.id}")
     else
